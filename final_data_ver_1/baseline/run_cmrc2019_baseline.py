@@ -42,6 +42,10 @@ from pytorch_pretrained_bert.modeling import PreTrainedBertModel,BertModel,BertC
 from pytorch_pretrained_bert.optimization import BertAdam
 from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 
+from vncorenlp import VnCoreNLP
+vncorenlp_file = r'/content/VnCoreNLP/VnCoreNLP-1.1.1.jar'
+vncorenlp = VnCoreNLP(vncorenlp_file)
+
 logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
                     datefmt = '%m/%d/%Y %H:%M:%S',
                     level = logging.INFO)
@@ -111,38 +115,82 @@ def read_squad_examples(input_data, is_training):
     """Read a SQuAD json file into a list of SquadExample."""
     # with open(input_file, "r", encoding='utf-8') as reader:
     replace_list=[
-        ['[BLANK]','[unused]'],
+        ['[BLANK1]','[unused1]'],
+       ['[BLANK2]','[unused2]'],
+       ['[BLANK3]','[unused3]'],
+       ['[BLANK4]','[unused4]'],
+       ['[BLANK5]','[unused5]'],
+       ['[BLANK6]','[unused6]'],
+       ['[BLANK7]','[unused7]'],
+       ['[BLANK8]','[unused8]'],
+       ['[BLANK9]','[unused9]'],
+       ['[BLANK10]','[unused10]'],
+       ['[BLANK11]','[unused11]'],
+       ['[BLANK12]','[unused12]'],
+       ['[BLANK13]','[unused13]'],
+       ['[BLANK14]','[unused14]'],
+       ['[BLANK15]','[unused15]'],
        ]
-
+    # for sentences in paragraph_text:
+    #         for word_index in range(len(sentences)):
+    #           word=sentences[word_index]
+    #           if is_blank == True and word != ']': continue
+    #           # print(word.strip())
+    #           if  word=="[" and sentences[word_index+1] == 'unused':
+    #               is_blank=True
+    #               tmp = word + sentences[word_index+1]
+    #           if word.strip() ==']':
+    #               is_blank=False
+    #               tmp += word
+    #           if is_blank is False:
+    #               tmp_text+=word+" "
+    #           else:
+    #               tmp_text+=tmp
+    #         paragraph_text=tmp_text.strip()
     def is_whitespace(c):
         if c == " " or c == "\t" or c == "\r" or c == "\n" or ord(c) == 0x202F:
             return True
         return False
-
+    number = np.arange(1, 15)
+    number = [str(i) for i in number]
     examples = []
     for entry in input_data['data']:
         # for paragraph in entry["paragraphs"]:
         paragraph=entry
         context_index=entry["context_id"]
         paragraph_text = paragraph["context"]
+
         for key,value in replace_list:
             paragraph_text=paragraph_text.replace(key,value,1)
+        paragraph_text = vncorenlp.tokenize(paragraph_text)
+        # print(paragraph_text)
         tmp_text=""
         is_blank=False
-        for word_index in range(len(paragraph_text)):
-            word=paragraph_text[word_index]
-            if  paragraph_text[word_index:word_index+7]=="[unused":
-                is_blank=True
-            if word.strip() ==']':
+        for sentences in paragraph_text:
+          for word_index in range(len(sentences)):
+              word=sentences[word_index]
+              if is_blank == True and word not in number and word != ']': continue
+              if  word=="[" and sentences[word_index+1] == 'unused':
+                  is_blank=True
+                  tmp = word + sentences[word_index+1]
+              if word in number and sentences[word_index-1] =='unused':
+                  tmp += word
+                  tmp += ']'
+
+              if word == ']':
                 is_blank=False
-            if is_blank is False:
-                tmp_text+=word.strip()+" "
-            else:
-                tmp_text+=word.strip()
-        paragraph_text=tmp_text.strip()
+                tmp_text+=tmp + " "
+                continue
+              if is_blank is False:
+                  tmp_text+=word+" "
+
+              # print(tmp_text)
+          paragraph_text=tmp_text.strip()
         doc_tokens = []
         char_to_word_offset = []
         prev_is_whitespace = True
+        # print(paragraph_text)
+        # return
         for c in paragraph_text:
             if is_whitespace(c):
                 prev_is_whitespace = True
@@ -153,16 +201,22 @@ def read_squad_examples(input_data, is_training):
                     doc_tokens[-1] += c
                 prev_is_whitespace = False
             char_to_word_offset.append(len(doc_tokens) - 1)
+        # print(paragraph_text.count('unused'))
+        # return
         if is_training:
             choices=paragraph["choices"]
-            for answer_index,choice_num in enumerate([paragraph["answer"]]):
-                answer_text="[unused]"
+            for answer_index in range(paragraph_text.count('unused')):
+                answer_text="[unused{}]".format(str((answer_index)+1))
+                choice_num = paragraph["answer"]
                 # tmp_answer_text=''
                 # for word in answer_text:
                 #     tmp_answer_text+=word+" "
                 # answer_text=tmp_answer_text.strip()
                 orig_answer_text = answer_text
-                question_text = choices[choice_num]
+
+                question_text = vncorenlp.tokenize(choices[choice_num])
+                question_text = '_'.join(question_text[0])
+
                 answer_offset = paragraph_text.find(orig_answer_text)
                 answer_length = len(orig_answer_text)
                 start_position = char_to_word_offset[answer_offset]
@@ -177,8 +231,8 @@ def read_squad_examples(input_data, is_training):
                 cleaned_answer_text = " ".join(
                     whitespace_tokenize(orig_answer_text))
                 if actual_text.find(cleaned_answer_text) == -1:
-                    logger.warning("Could not find answer: '%s' vs. '%s'",
-                                       actual_text, cleaned_answer_text)
+                    # logger.warning("Could not find answer: '%s' vs. '%s'",
+                    #                    actual_text, cleaned_answer_text)
                     logger.info("context: {}".format(doc_tokens))
                     logger.info("context: {}".format(paragraph_text))
                     logger.info("chooses: {}".format(choices))
@@ -193,8 +247,13 @@ def read_squad_examples(input_data, is_training):
                 examples.append(example)
         else:
             answer_index=[-1 for i in re.findall(r'\[unused\d*\]',paragraph_text)] # store the number of blank positions
-            if len(paragraph['answer'])>0:
-                assert len(answer_index) == len(paragraph['answer'])
+            # print(len(answer_index))
+            # print(paragraph_text.count('unused'))
+            if paragraph_text.count('unused')>0:
+              try:
+                assert len(answer_index) == paragraph_text.count('unused')
+              except:
+                print(paragraph_text)
             #answer_index=paragraph['answers']
             for choice_index,choice in enumerate(paragraph["choices"]):
                 question_text = choice
