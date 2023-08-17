@@ -43,7 +43,7 @@ from pytorch_pretrained_bert.optimization import BertAdam
 from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 
 from vncorenlp import VnCoreNLP
-vncorenlp_file = r'/content/VnCoreNLP/VnCoreNLP-1.1.1.jar'
+vncorenlp_file = r'/kaggle/working/VnCoreNLP/VnCoreNLP-1.1.1.jar'
 vncorenlp = VnCoreNLP(vncorenlp_file)
 
 logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
