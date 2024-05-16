@@ -15,7 +15,7 @@
 # Thực nghiệm và kết quả:
   Kết quả:
 
-|                           | Mẫu 1                           | Mẫu 2                           | Mẫu 3                           |
+|                           | Mẫu 1         | Mẫu 1           | Mẫu 2         | Mẫu 2           | Mẫu 3         | Mẫu 3           |
 |---------------------------|---------------|-----------------|---------------|-----------------|---------------|-----------------|
 |                           | Accuracy      | F1-score        | Accuracy      | F1-score        | Accuracy      | F1-Score        |
 |                           | Dev | Test    | Dev | Test      | Dev | Test    | Dev | Test      | Dev | Test    | Dev | Test      |
