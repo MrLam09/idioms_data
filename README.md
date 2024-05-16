@@ -12,13 +12,16 @@
   - Data_ver1: Bộ dữ liệu chỉ có dữ liệu ở mức 1.
   - Data_ver2: Bộ dữ liệu gồm dữ liệu ở mức 1 và 2.
   - Data_ver3: Bộ dữ liệu gồm dữ liệu ở mức 1 và 3.
-# Thực nghiệm và kết quả: 
-  									                      Mẫu 1 				        Mẫu 2 				  	      Mẫu 3  
-  							                  Accuracy 	F1-score 	    Accuracy 	F1-score 	    Accuracy   F1-Score
-                                  Dev  Test 	Dev  Test 	Dev Test 	Dev  Test 	  Dev  Test  Dev  Test
-        BERT-Multiligual-Cased 		0.58 0.51 	0.57 0.51 	0.43 0.39 	0.42 0.38 	0.4  0.34  0.4  0.33
-        DistilBERT-Base-VI-Cased 	0.62 0.52 	0.62 0.52 	0.37 0.38 	0.36 0.38 	0.37 0.38  0.37 0.38
-        PhoBERT 					        0.58 0.54 	0.58 0.54 	0.43 0.38 	0.43 0.38 	0.38 0.36  0.38 0.36
-        XLM-RoBERTa-base 			    0.61 0.52 	0.61 0.51 	0.41 0.41 	0.41 0.4 	  0.39 0.36  0.39 0.36
-        InfoXLM-Base 				      0.61 0.52 	0.61 0.51 	0.41 0.41 	0.41 0.4 	  0.39 0.36  0.39 0.36
+# Thực nghiệm và kết quả:
+  Kết quả:
+       |							             |        Mẫu 1 				      |         Mẫu 2 				  	 |           Mẫu 3           |
+  		 |					                 |----------------------------|----------------------------|---------------------------|
+       |                           |   Accuracy  |	 F1-score   |	  Accuracy  |	F1-score 	   |   Accuracy  | F1-Score    |
+       |                           |----------------------------|----------------------------|---------------------------|
+       |                           | Dev  | Test |	Dev  | Test |	Dev | Test 	|  Dev  | Test | Dev  | Test | Dev  | Test |
+       | BERT-Multiligual-Cased 	 | 0.58 | 0.51 |	0.57 | 0.51 |	0.43| 0.39  |	0.42  | 0.38 | 0.4  | 0.34 | 0.4  | 0.33 |
+       | DistilBERT-Base-VI-Cased  | 0.62 | 0.52 |	0.62 | 0.52 |	0.37| 0.38  |	0.36  | 0.38 | 0.37 | 0.38 | 0.37 | 0.38 |
+       | PhoBERT 					         | 0.58 | 0.54 |	0.58 | 0.54 |	0.43| 0.38  | 0.43  | 0.38 | 0.38 | 0.36 | 0.38 | 0.36 |
+       | XLM-RoBERTa-base 			   | 0.61 | 0.52 |	0.61 | 0.51 |	0.41 |0.41  |	0.41  | 0.4  | 0.39 | 0.36 | 0.39 | 0.36 |
+       | InfoXLM-Base 				     | 0.61 | 0.52 |	0.61 | 0.51 |	0.41 |0.41  |	0.41  | 0.4  | 0.39 | 0.36 | 0.39 | 0.36 |
     
