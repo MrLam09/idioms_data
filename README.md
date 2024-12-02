@@ -1,4 +1,4 @@
-# Nghiên cứu về đọc hiểu tự động cho thành ngữ tiếng Việt  
+# Nghiên cứu về đọc hiểu tự động cho thành ngữ tiếng Việt (Machine Learning Comprehension for Vietnamese Idioms)
 # Giới thiệu:  
   Xây dựng bộ ngữ liệu về thành ngữ, tục ngữ tiếng Việt và nghiên cứu bộ ngữ liệu đã tạo với các mô hình LLMs như BERT và các biến thể của chúng.  
 # Bộ dữ liệu về thành ngữ và tục ngữ tiếng Việt (ViID):  
